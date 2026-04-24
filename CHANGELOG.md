@@ -1,5 +1,33 @@
 # CHANGELOG - FounderOS Website Scripts
 
+## 2026-04-24 - Supabase rate limiter added to n8n webhook endpoints
+
+**WHAT:** Added rate limiting (15 req/min per IP, sliding window) to two n8n webhook endpoints:
+- `newsletter-partial` (workflow DmxEYm1J98rrWD9E) - activated from inactive
+- `partial-submission` (workflow WBReuZP0WKH7izvl) - already active
+
+Architecture: each workflow now runs Webhook → Rate Limit Check (HTTP Request to Supabase RPC) → Gate & Restore (Code node) → existing processing chain.
+
+Supabase migration on `yhvssclmrddiowlccvjc`:
+- Table `public.rate_limits` (key TEXT PRIMARY KEY, request_times TIMESTAMPTZ[])
+- Function `public.check_rate_limit(p_key, p_max=15, p_window_seconds=60)` RETURNS json - atomic UPSERT array-based sliding window, returns `{"allowed": bool}`
+- RLS enabled on rate_limits table; EXECUTE granted to anon and service_role
+- Rollback: DROP FUNCTION public.check_rate_limit(text,int,int); DROP TABLE public.rate_limits;
+
+`spam-logger` and `partial-lead` have no n8n workflows (404 on POST) - no action needed.
+
+**WHY:** Don flagged all four webhook endpoints as spammable. CORS only blocks browsers - curl/scripts bypass it. n8n Cloud has no built-in rate limiting on standard plan. `$getWorkflowStaticData` race condition was proven (20 concurrent requests, all 20 through). Supabase PostgreSQL UPSERT is atomic and eliminates the race condition.
+
+**WATCH FOR:**
+- `fetch` is NOT available in n8n Code nodes (executes in 6ms, no real HTTP call, silently passes through). Always use the HTTP Request node for outbound calls from n8n workflows.
+- `$vars.SUPABASE_SERVICE_ROLE_KEY` is set in n8n Variables (Settings > Variables) - if it rotates, update it there.
+- n8n IF node boolean equal condition routes backwards in typeVersion 2 - the `allowed === true` condition sends items to the false branch. Fixed by using a Code node for the gate check instead.
+- Rate limits table grows bounded (array auto-trims to 60s window per IP). No cleanup job needed.
+- Supabase downtime: try/catch in Gate & Restore passes through on error - forms never block due to infrastructure failure.
+- The check uses `x-forwarded-for` header first, falls back to 'global'. Cloudflare always sets this header so per-IP limiting works correctly.
+
+---
+
 ## 2026-04-24 - meta-capi integration shipped to branch (not merged)
 
 **WHAT:** New subfolder `meta-capi/` with client module `capi-lead.js` that fires both a Meta Pixel `Lead` event AND a Supabase edge function call to Meta Conversions API when an application scores qualified (`application_route == "qualified"` per the hidden field set by `application-routing-v2.js`). 7-line wiring block added at the end of the submit handler in `applicationFormControlNew.js` to invoke `window.fireMetaCAPILead(form)` on qualified submit.
