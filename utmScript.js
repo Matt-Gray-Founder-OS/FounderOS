@@ -1,16 +1,55 @@
 /* ========================================
-   Founder OS - UTM & Click ID Persistence
-   Captures UTMs + fbclid on landing,
-   persists in 30-day cookies, populates
-   hidden form fields on every page load.
+   Founder OS - UTM, Click ID & Event Persistence
+   Captures UTMs, fbclid, event params
+   on landing, persists in 30-day cookies,
+   populates hidden form fields on every page load.
    ======================================== */
 
 (function () {
 
-  var UTM_PARAMS = ["utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content"];
-  var HSA_PARAMS = ["hsa_acc", "hsa_cam", "hsa_grp", "hsa_ad", "hsa_src", "hsa_net"];
-  var CLICK_IDS = ["fbclid"];
-  var ALL_PARAMS = UTM_PARAMS.concat(HSA_PARAMS).concat(CLICK_IDS);
+  var UTM_PARAMS = [
+    "utm_source",
+    "utm_medium",
+    "utm_campaign",
+    "utm_term",
+    "utm_content"
+  ];
+
+  var HSA_PARAMS = [
+    "hsa_acc",
+    "hsa_cam",
+    "hsa_grp",
+    "hsa_ad",
+    "hsa_src",
+    "hsa_net"
+  ];
+
+  var CLICK_IDS = [
+    "fbclid"
+  ];
+
+  /* ---- Calendly / Event Params ---- */
+
+  var EVENT_PARAMS = [
+    "assigned_to",
+    "event_type_uuid",
+    "event_type_name",
+    "event_start_time",
+    "event_end_time",
+    "invitee_uuid",
+    "invitee_first_name",
+    "invitee_last_name",
+    "invitee_full_name",
+    "invitee_email",
+    "text_reminder_number",
+    "answer_1"
+  ];
+
+  var ALL_PARAMS = UTM_PARAMS
+    .concat(HSA_PARAMS)
+    .concat(CLICK_IDS)
+    .concat(EVENT_PARAMS);
+
   var COOKIE_DAYS = 30;
 
   /* ---- Read URL param (anti-fragile, handles hash/encoding edge cases) ---- */
@@ -28,22 +67,38 @@
 
   function setCookie(name, value, days) {
     var expires = new Date(Date.now() + days * 86400000).toUTCString();
-    document.cookie = name + "=" + encodeURIComponent(value) + "; path=/; expires=" + expires + "; SameSite=Lax";
+
+    document.cookie =
+      name +
+      "=" +
+      encodeURIComponent(value) +
+      "; path=/; expires=" +
+      expires +
+      "; SameSite=Lax";
   }
 
   function getCookie(name) {
-    var match = document.cookie.match(new RegExp("(?:^|; )" + name + "=([^;]*)"));
+    var match = document.cookie.match(
+      new RegExp("(?:^|; )" + name + "=([^;]*)")
+    );
+
     return match ? decodeURIComponent(match[1]) : null;
   }
 
   /* ---- sessionStorage helpers (backup layer) ---- */
 
   function setSession(name, value) {
-    try { sessionStorage.setItem(name, value); } catch (e) {}
+    try {
+      sessionStorage.setItem(name, value);
+    } catch (e) {}
   }
 
   function getSession(name) {
-    try { return sessionStorage.getItem(name); } catch (e) { return null; }
+    try {
+      return sessionStorage.getItem(name);
+    } catch (e) {
+      return null;
+    }
   }
 
   /* ---- Save params from URL to cookie + sessionStorage ---- */
@@ -51,6 +106,7 @@
   function saveParams() {
     ALL_PARAMS.forEach(function (key) {
       var value = getParam(key);
+
       if (value) {
         setCookie(key, value, COOKIE_DAYS);
         setSession(key, value);
@@ -69,17 +125,17 @@
   function populateFields() {
     ALL_PARAMS.forEach(function (key) {
       var value = getStored(key);
+
       if (value) {
-        var fields = document.querySelectorAll('input[name="' + key + '"]');
+        var fields = document.querySelectorAll(
+          'input[name="' + key + '"]'
+        );
+
         for (var i = 0; i < fields.length; i++) {
           fields[i].value = value;
         }
       }
     });
-
-    /* fbclid is already in ALL_PARAMS so it gets populated into
-       input[name="fbclid"] by the loop above. No special mapping needed.
-       The HubSpot form field is named "fbclid" (our custom property). */
   }
 
   /* ---- Init on DOM ready ---- */
