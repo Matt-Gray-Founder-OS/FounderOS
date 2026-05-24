@@ -33,7 +33,7 @@ Webflow /apply  (matt-gray-founder-os.github.io/FounderOS/meta-capi/capi-lead.js
 ## Files
 - `capi-lead.js` — client module, exposes `window.fireMetaCAPILead(form)`. `IS_TEST = true` constant routes all fires to Events Manager Test Events tab until flipped.
 - `../applicationFormControlNew.js` — one 7-line wiring block at end of submit handler reads `application_route` hidden field, invokes the fire function on qualified.
-- Edge function source: `~/dev/fos-context/supabase/functions/meta-capi-lead/index.ts` (deployed on central vault project).
+- Edge function source: `~/dev/fos-control/supabase/functions/meta-capi-lead/index.ts` (deployed on central vault project).
 
 ## Webflow embed (not done — next step)
 
@@ -58,7 +58,7 @@ Add a script tag to `/apply` page in Webflow:
 
 3. **Scheduled error-rate alert.** Nothing watches `meta_capi_events` for spikes in `error_reason IS NOT NULL`. Add `/schedule` trigger (hourly) that queries last-hour error count and posts to Slack / announcements if above a threshold. Pattern mirrors the fos-call-scoring `fathom_ingestion_audit` trigger.
 
-4. **Test harness file.** Unit tests for the edge function do not exist. Precedent: `fos-context/supabase/functions/_shared/utils.ts` has tests in `vault_migration_test.ts`. Add `meta-capi-lead/index_test.ts` covering: UUID validation, CORS allowlist, rate limit math, SHA256 of sample email/phone, Meta-vs-network-vs-parse error classification. Run via `deno test` in the edge function deploy script's pre-deploy E2E slot.
+4. **Test harness file.** Unit tests for the edge function do not exist. Precedent: `fos-control/supabase/functions/_shared/utils.ts` has tests in `vault_migration_test.ts`. Add `meta-capi-lead/index_test.ts` covering: UUID validation, CORS allowlist, rate limit math, SHA256 of sample email/phone, Meta-vs-network-vs-parse error classification. Run via `deno test` in the edge function deploy script's pre-deploy E2E slot.
 
 ## Watch-for
 - `IS_TEST` is on `capi-lead.js` line 11. Flipping it is a one-char edit but has big consequences (pollutes live ad-attribution until flipped back). Always pair the flip with at least one qualified submit + Test Events verification.

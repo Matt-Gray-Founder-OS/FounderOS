@@ -34,7 +34,7 @@ Supabase migration on `yhvssclmrddiowlccvjc`:
 
 `IS_TEST = true` in `capi-lead.js` routes all events to Events Manager Test Events tab (test_event_code `TEST4208`, vaulted). Flip to `false` for go-live.
 
-Edge function source lives in `fos-context/supabase/functions/meta-capi-lead/` and is deployed on central vault project `yhvssclmrddiowlccvjc`. Reads `meta_ads_token`, `founder_os_meta_pixel`, `meta_capi_test_event_code` from vault at request time. First end-to-end test 2026-04-24 10:15 UTC landed in Meta with HTTP 200 (trace AU5ERCPRuHbDKljaHw_ohcl).
+Edge function source lives in `fos-control/supabase/functions/meta-capi-lead/` and is deployed on central vault project `yhvssclmrddiowlccvjc`. Reads `meta_ads_token`, `founder_os_meta_pixel`, `meta_capi_test_event_code` from vault at request time. First end-to-end test 2026-04-24 10:15 UTC landed in Meta with HTTP 200 (trace AU5ERCPRuHbDKljaHw_ohcl).
 
 **Dedup contract:** `capi-lead.js` generates ONE UUID per qualified submit, passes same UUID as `eventID` to `fbq('track', 'Lead', ...)` AND as `event_id` to the CAPI edge function. Meta dedupes within 48h.
 

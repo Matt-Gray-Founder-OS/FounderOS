@@ -153,7 +153,7 @@ The Tier 2 PENDING blocks across projects need explicit owners and deadlines, ot
 | velocity herb-sales-deck | Hardcoded cw2s-j7z-zyk CTA replaced with ct4n-hw4-d8m | TBD | **BEFORE T+48h** (Calendly delete) |
 | aria-triage-agent-v2 | server/config/routing.js + tests collapse to single ARIA event | TBD | TBD |
 | alberto-calendly-routing | 5-tier table replaced with single ct4g-kpp-zx8; in-flight bookings on cwym-hn5-hgz / cr82-2vz-hdt have a migration plan | TBD | TBD |
-| fos-context CLAUDE.md sync | hubspot-ops.md materialized to ~/.claude/rules/ via pull | Don | Next pull cycle |
+| fos-control CLAUDE.md sync | hubspot-ops.md materialized to ~/.claude/rules/ via pull | Don | Next pull cycle |
 
 ---
 
