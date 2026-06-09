@@ -1,6 +1,6 @@
 # Meta CAPI Integration (subproject of FounderOS)
 
-## Status: LIVE. Merged to main 2026-04-24, edge function deployed, `capi-lead.js` served from GitHub Pages, `IS_TEST=false` (firing to Meta live reporting). Last remaining step: Webflow `<script>` tag added to /apply page (operator task — tag provided but not yet verified pasted).
+## Status: LIVE and healthy as of 2026-06-09. Edge function deployed on **Sales project (ldspjkntkuuqlwrdefzh, "zh")** as of the 2026-05-01 fos-control hygiene migration (was originally on FOS Control yhvssclmrddiowlccvjc until the payments cluster moved). `capi-lead.js` served from GitHub Pages, Webflow `<script>` tag confirmed present on /apply (last published 2026-06-07). `IS_TEST=false` firing to Meta live reporting. Audit table `meta_capi_events` on Sales: 240 events, 0 errors, last event 2026-06-08 17:23 UTC. Pattern B in effect: function on zh writes audit to zh + reads vault from FOS Control via `CONTEXT_SUPABASE_URL`/`CONTEXT_SUPABASE_SERVICE_KEY`.
 ## Purpose: Fire a Meta Conversions API `Lead` event from the Webflow front end when an application scores qualified (>= 11 per `application-routing-v2.js` QUALIFIED_THRESHOLD).
 ## Parent: Matt-Gray-Founder-OS/FounderOS (GitHub Pages, founderos.com).
 ## Deploy: Client-side JS loaded on /apply via `<script src="matt-gray-founder-os.github.io/FounderOS/meta-capi/{file}.js">`. Merge to main to deploy — repo auto-publishes to GitHub Pages on push.
@@ -33,7 +33,7 @@ Webflow /apply  (matt-gray-founder-os.github.io/FounderOS/meta-capi/capi-lead.js
 ## Files
 - `capi-lead.js` — client module, exposes `window.fireMetaCAPILead(form)`. `IS_TEST = true` constant routes all fires to Events Manager Test Events tab until flipped.
 - `../applicationFormControlNew.js` — one 7-line wiring block at end of submit handler reads `application_route` hidden field, invokes the fire function on qualified.
-- Edge function source: `~/dev/fos-control/supabase/functions/meta-capi-lead/index.ts` (deployed on central vault project).
+- Edge function source: `~/dev/fos-control/supabase/functions/meta-capi-lead/index.ts` (deployed on Sales project `ldspjkntkuuqlwrdefzh` since 2026-05-01; source still lives in the fos-control repo).
 
 ## Webflow embed (not done — next step)
 
