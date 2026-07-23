@@ -23,6 +23,10 @@ Events verification. The client logs a non-2xx server response; the failure to
 watch for is a silent no-op, so confirm a server-side audit row lands, not just
 the Pixel event.
 
+**Go-live 2026-07-23:** `IS_TEST` flipped to false after staging + Meta Test
+Events verification (pixel 717725617464118, Pixel/CAPI dedup confirmed on the
+shared event_id). Live ad attribution on for /workshop CompleteRegistration.
+
 ## 2026-04-24 - Supabase rate limiter added to n8n webhook endpoints
 
 **WHAT:** Added rate limiting (15 req/min per IP, sliding window) to two n8n webhook endpoints:

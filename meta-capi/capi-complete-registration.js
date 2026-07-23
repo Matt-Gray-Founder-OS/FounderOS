@@ -11,7 +11,8 @@
   // events land in Events Manager -> Test Events, NOT live ad attribution.
   // Flip to false at go-live (see meta-capi/CLAUDE.md go-live steps). Pair any
   // flip with a real submit + Events Manager verification.
-  var IS_TEST = true;
+  // 2026-07-23: LIVE. Staging + Meta Test Events verified before this flip.
+  var IS_TEST = false;
 
   // Generalized Meta CAPI endpoint on the Sales project (ldspjkntkuuqlwrdefzh).
   // Reads meta_ads_token + founder_os_meta_pixel from the FOS Control vault at
