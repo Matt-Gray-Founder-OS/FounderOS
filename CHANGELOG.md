@@ -30,11 +30,10 @@ references were removed from the `/thank-you/*` template and `/apply` in the Des
 `redirectByCountryConfig` call was preserved. Verified: a crawl of all 342 live sitemap pages found 0
 references to any of the 6 files.
 
-**WATCH FOR:** The unpublished `apply-v2` page (dead ARIA experiment; 404, not served) still references
-`applicationFormControlNew.js` + `application-routing-aria.js` in its Designer footer - dangling now, no
-live impact. Clean that footer down to `redirectByCountryConfig` in the Designer, or delete the page;
-Webflow's API refuses these custom-code writes (HTTP 406), so it is Designer-only. Also `meta-capi.md`
-Section 5 still lists these now-deleted files and needs updating in the docs pass.
+**WATCH FOR:** Only dead files were removed here; the live `application-*` scripts and the geo-IP
+`redirectByCountryConfig` call are untouched. Two same-day follow-ups, both since resolved: the
+unpublished `apply-v2` page (which still referenced two of these files) was deleted from Webflow, and
+`meta-capi.md` Section 5 was updated to reflect the removals.
 
 ## 2026-07-23 - Remove dead backup/deprecated files
 
