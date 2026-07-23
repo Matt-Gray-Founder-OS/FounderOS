@@ -4,7 +4,9 @@
 
 **WHAT:** New `meta-capi/meta-capi.md` end-to-end explainer (Lead + CompleteRegistration).
 `meta-capi/CLAUDE.md` cut to a lean pointer; `README.md` corrected (was "scaffold, in
-progress"); parent `CLAUDE.md` meta-capi row updated. **WHY:** the old docs described a
+progress"); parent `CLAUDE.md` meta-capi row updated. Also corrected a stale deployment
+comment in `capi-lead.js` (it read "central vault project"; the Lead function deploys to
+Sales and reads vault from FOS Control, Pattern B). **WHY:** the old docs described a
 Lead-only scaffold era that contradicted the shipped, live system (per the doc-drift audit).
 **WATCH FOR:** meta-capi.md is the single source of truth; keep `CLAUDE.md` a pointer, not a
 status log.

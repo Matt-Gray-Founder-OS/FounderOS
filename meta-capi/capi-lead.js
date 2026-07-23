@@ -11,9 +11,10 @@
   // Events Manager → Test Events, not live ad attribution.
   var IS_TEST = false;
 
-  // Supabase edge function endpoint. Deployed on central vault project
-  // (yhvssclmrddiowlccvjc). Reads meta_ads_token + founder_os_meta_pixel
-  // + meta_capi_test_event_code from vault at request time.
+  // Supabase edge function endpoint. Deployed on the Sales project
+  // (ldspjkntkuuqlwrdefzh); reads meta_ads_token + founder_os_meta_pixel
+  // + meta_capi_test_event_code from the FOS Control vault
+  // (yhvssclmrddiowlccvjc) at request time (Pattern B).
   var CAPI_ENDPOINT = "https://ldspjkntkuuqlwrdefzh.supabase.co/functions/v1/meta-capi-lead";
 
   // Per-form dedup — WeakSet keyed by form element. Prevents double-fire on
