@@ -47,7 +47,7 @@ All inbound bookings flow through Brand Strategy Call round robins. No Intro Cal
 ### Subprojects
 | Folder | Purpose |
 |--------|---------|
-| meta-capi/ | Meta Conversions API integration — fires Lead event server-side (in addition to client Pixel) when application routing scores >= 11. Merged to main 2026-04-24, live. Awaiting Webflow `<script>` tag paste on /apply. See meta-capi/CLAUDE.md. |
+| meta-capi/ | Meta Conversions API integration. Fires **Lead** (`/apply`, qualified application) and **CompleteRegistration** (`/workshop`, registration) server-side alongside the browser Pixel, deduped on a shared event_id. LIVE. Full docs: `meta-capi/meta-capi.md`. |
 
 ### Key Files
 | File | Purpose |

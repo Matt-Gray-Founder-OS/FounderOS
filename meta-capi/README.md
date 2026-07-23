@@ -1,36 +1,21 @@
 # meta-capi
 
-Meta Conversions API integration for founderos.com application form. Fires a `Lead` event to Meta when an inbound application scores `>= 11` (the qualified threshold computed by `application-routing-v2.js`).
+Meta Conversions API integration for founderos.com. Fires server-side conversion
+events (alongside the browser Pixel) so Meta still attributes conversions when the
+Pixel is blocked by an ad blocker or privacy setting:
 
-## How it plugs in
+- **Lead** on `/apply` when an application scores qualified.
+- **CompleteRegistration** on `/workshop` when the registration form succeeds.
 
-```
-/apply (Webflow page)
-  └── application-routing-v2.js   ─ scores form answers
-        └── score >= 11           ─ redirects to /book-now?route=qualified
-              └── meta-capi       ─ fires Lead event to Meta (this subproject)
-```
+Both share one `event_id` with the Pixel so Meta deduplicates.
 
-## Load path
+## Files
+- `capi-complete-registration.js` - CompleteRegistration browser module.
+- `capi-lead.js` - Lead browser module.
+- `meta-capi.md` - the full explanation (start here).
+- `CLAUDE.md` - operator cheat-sheet.
 
-This folder is served via GitHub Pages alongside the rest of the FounderOS website scripts:
+Served via GitHub Pages at `matt-gray-founder-os.github.io/FounderOS/meta-capi/<file>.js`.
+Server code lives in the `fos-control` repo and deploys to the Sales Supabase project.
 
-```
-https://matt-gray-founder-os.github.io/FounderOS/meta-capi/<filename>.js
-```
-
-Webflow pages embed the script tag. Every push to `main` auto-deploys to GitHub Pages, so the Webflow site picks up changes on the next page load.
-
-## Status
-
-Scaffold only — branch `meta-capi`. Implementation design in progress. See `CLAUDE.md` for the current set of open design questions and the integration contract.
-
-## Layout
-
-```
-meta-capi/
-├── CLAUDE.md   operator + agent context, integration plan
-└── README.md   this file
-```
-
-JS modules land here during implementation.
+**Status: LIVE.** See `meta-capi.md`.

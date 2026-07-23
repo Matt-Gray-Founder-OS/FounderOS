@@ -1,5 +1,14 @@
 # CHANGELOG - FounderOS Website Scripts
 
+## 2026-07-23 - meta-capi docs consolidated into meta-capi.md
+
+**WHAT:** New `meta-capi/meta-capi.md` end-to-end explainer (Lead + CompleteRegistration).
+`meta-capi/CLAUDE.md` cut to a lean pointer; `README.md` corrected (was "scaffold, in
+progress"); parent `CLAUDE.md` meta-capi row updated. **WHY:** the old docs described a
+Lead-only scaffold era that contradicted the shipped, live system (per the doc-drift audit).
+**WATCH FOR:** meta-capi.md is the single source of truth; keep `CLAUDE.md` a pointer, not a
+status log.
+
 ## 2026-07-23 - Meta CAPI CompleteRegistration on /workshop
 
 **WHAT:** New `meta-capi/capi-complete-registration.js` client module
