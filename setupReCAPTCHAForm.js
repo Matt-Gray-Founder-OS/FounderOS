@@ -2,7 +2,8 @@ function setupReCAPTCHAForm({
   formSelector,
   redirectFields = null,
   redirectUrl = null,
-  delay = 0
+  delay = 0,
+  onSuccess = null
 }) {
 
   function attachHandler(form) {
@@ -18,8 +19,8 @@ function setupReCAPTCHAForm({
         form.setAttribute('data-webflow-hubspot-api-form-url', hubspotUrl);
       }
 
-      // no redirect configured → nothing else to do
-      if (!redirectFields || !redirectUrl) return;
+      // Nothing to observe unless we have a success hook or a redirect.
+      if (!onSuccess && (!redirectFields || !redirectUrl)) return;
 
       const wrapper = form.closest('.w-form');
       if (!wrapper) return;
@@ -30,6 +31,20 @@ function setupReCAPTCHAForm({
 
         if (done && done.offsetParent !== null) {
           observer.disconnect();
+
+          // Success hook fires first (e.g. Meta CompleteRegistration), before
+          // any redirect navigates away. A hook error must never block the
+          // redirect or the submission flow.
+          if (typeof onSuccess === 'function') {
+            try {
+              onSuccess(form);
+            } catch (e) {
+              if (window.console) console.warn('setupReCAPTCHAForm: onSuccess threw', e);
+            }
+          }
+
+          // Redirect is optional; a caller may pass only onSuccess.
+          if (!redirectFields || !redirectUrl) return;
 
           const params = new URLSearchParams();
 

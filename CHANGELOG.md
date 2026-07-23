@@ -1,5 +1,28 @@
 # CHANGELOG - FounderOS Website Scripts
 
+## 2026-07-23 - Meta CAPI CompleteRegistration on /workshop
+
+**WHAT:** New `meta-capi/capi-complete-registration.js` client module
+(`window.fireMetaCompleteRegistration`) fires a Meta `CompleteRegistration` event
+- browser Pixel + server CAPI sharing one `event_id` for dedup - on a verified
+successful /workshop registration. Added an optional `onSuccess(form)` callback
+to the shared `setupReCAPTCHAForm.js` (fires at `.w-form-done`, before the
+redirect); backward-compatible no-op for every existing caller (`.gfm-form`
+etc.). Server endpoint + engine live in fos-control (deployed to Sales
+`ldspjkntkuuqlwrdefzh`).
+
+**WHY:** /workshop submissions sent nothing to Meta; this closes the attribution
+gap for workshop registrations, mirroring the /apply Lead integration but adding
+`_fbp`/`_fbc` match-quality signals.
+
+**WATCH FOR:** Wire on /workshop with a call-time wrapper
+(`onSuccess: function(f){ if (window.fireMetaCompleteRegistration) window.fireMetaCompleteRegistration(f); }`)
+so script load order cannot strand the fire. `IS_TEST = true` routes to Events
+Manager Test Events until go-live; flip to false only after a real submit + Test
+Events verification. The client logs a non-2xx server response; the failure to
+watch for is a silent no-op, so confirm a server-side audit row lands, not just
+the Pixel event.
+
 ## 2026-04-24 - Supabase rate limiter added to n8n webhook endpoints
 
 **WHAT:** Added rate limiting (15 req/min per IP, sliding window) to two n8n webhook endpoints:
