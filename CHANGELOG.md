@@ -1,5 +1,25 @@
 # CHANGELOG - FounderOS Website Scripts
 
+## 2026-07-23 - Remove inert application/ARIA routing scripts (post-iClosed cleanup)
+
+**WHAT:** Deleted 6 now-unreferenced browser scripts left over from before iClosed replaced the
+application + booking flow: `applicationFormControlNew.js`, `application-routing-v2.js`,
+`application-form-name-handler.js`, `meta-capi/capi-lead.js`, `application-routing-aria.js`,
+`application-routing-9Jun2026.js`.
+
+**WHY:** iClosed now serves application + booking on every page, so the native `#fos-application-main`
+form and its routing/scoring/name-handler scripts, the browser Lead module (`capi-lead.js`, inert on
+`/apply`), and the ARIA routing (nothing routes to ARIA anymore) are all inert leftovers. The Webflow
+references were removed from the `/thank-you/*` template and `/apply` in the Designer; the live geo-IP
+`redirectByCountryConfig` call was preserved. Verified: a crawl of all 342 live sitemap pages found 0
+references to any of the 6 files.
+
+**WATCH FOR:** The unpublished `apply-v2` page (dead ARIA experiment; 404, not served) still references
+`applicationFormControlNew.js` + `application-routing-aria.js` in its Designer footer - dangling now, no
+live impact. Clean that footer down to `redirectByCountryConfig` in the Designer, or delete the page;
+Webflow's API refuses these custom-code writes (HTTP 406), so it is Designer-only. Also `meta-capi.md`
+Section 5 still lists these now-deleted files and needs updating in the docs pass.
+
 ## 2026-07-23 - Remove dead backup/deprecated files
 
 **WHAT:** Deleted 35 dead/stale tracked files: the `deprecated/` (19) and `backup codes/` (13)
