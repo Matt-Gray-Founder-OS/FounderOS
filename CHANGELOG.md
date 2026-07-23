@@ -1,5 +1,29 @@
 # CHANGELOG - FounderOS Website Scripts
 
+## 2026-07-23 - Harden setupReCAPTCHAForm (idempotent binding) + dedupe /workshop footer
+
+**WHAT:** `setupReCAPTCHAForm.js` now binds once per form: `attachHandler` returns early if
+`form.dataset.fosRecaptchaBound === '1'`, otherwise it sets the flag before adding the submit
+listener. Separately, the `/workshop` Webflow footer had two
+`setupReCAPTCHAForm({ formSelector: '.workshop-form-hubspot' ... })` blocks (the original, plus
+the CompleteRegistration `onSuccess` call added at CR go-live); collapsed to the single
+`onSuccess` call and one `noscript` waitlist failsafe (done in Webflow Designer, published live).
+
+**WHY:** The workshop registration form was initialized twice, attaching two submit listeners and
+two MutationObservers. Both fired on `.w-form-done`; the first-registered (no-hook) one could win
+the redirect race and navigate away before the `onSuccess` fire, making CompleteRegistration
+fragile. The guard makes binding deterministic for every form site-wide; the footer edit removes
+the real duplicate. First call wins, so the surviving `/workshop` call is the one carrying
+`onSuccess`.
+
+**WATCH FOR:** Guard is fail-open (still attaches if `dataset` is unavailable) and
+behavior-preserving for single-call forms (they still bind exactly once). Ordering was
+load-bearing: the footer dedup had to be published live BEFORE this guard shipped, or the guard
+would keep the no-hook call and drop CR. Verified live: `/workshop` serves exactly one
+`.workshop-form-hubspot` setup (with `onSuccess`); the page's other setup targets the unrelated
+`.gfm-form` modal. Runtime-tested 3/3 (idempotency, happy path, `.w-form-fail` resubmit) with a
+local node harness.
+
 ## 2026-07-23 - meta-capi docs: correct the Lead mechanism to reality (iClosed -> n8n)
 
 **WHAT:** Rewrote the Lead half of `meta-capi/meta-capi.md` and `meta-capi/CLAUDE.md`.

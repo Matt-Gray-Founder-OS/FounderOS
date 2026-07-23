@@ -7,6 +7,15 @@ function setupReCAPTCHAForm({
 }) {
 
   function attachHandler(form) {
+    // Bind once per form. setupReCAPTCHAForm can be called more than once for
+    // the same selector (e.g. two custom-code blocks on a page). Without this
+    // guard each call adds another submit listener + MutationObserver, so the
+    // redirect from one setup races the onSuccess hook of another. First call
+    // wins; keep the call that carries onSuccess. Fail-open: if dataset is
+    // unavailable the handler still attaches.
+    if (form.dataset.fosRecaptchaBound === '1') return;
+    form.dataset.fosRecaptchaBound = '1';
+
     let submitted = false;
 
     form.addEventListener('submit', () => {
