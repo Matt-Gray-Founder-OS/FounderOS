@@ -1,5 +1,17 @@
 # CHANGELOG - FounderOS Website Scripts
 
+## 2026-07-23 - meta-capi docs: correct the Lead mechanism to reality (iClosed -> n8n)
+
+**WHAT:** Rewrote the Lead half of `meta-capi/meta-capi.md` and `meta-capi/CLAUDE.md`.
+The Lead event is NOT the old browser/Webflow-form path - it fires **server-side**
+from an iClosed "Call booked" webhook via n8n `WF1 - iClosed -> Supabase (MVP)` ->
+`meta-capi-lead`, gated on an inbound Brand Strategy Call with a qualifying annual
+revenue band. `capi-lead.js` + the `/apply` Webflow application/routing stack are now
+documented as dead leftovers. CompleteRegistration (/workshop, browser) is unchanged.
+**WHY:** iClosed replaced the Webflow application funnel; the docs described a Lead
+path that no longer runs. Now they match production. **WATCH FOR:** removing the dead
+browser/routing scripts is the separate code-audit pass, not done here.
+
 ## 2026-07-23 - meta-capi docs consolidated into meta-capi.md
 
 **WHAT:** New `meta-capi/meta-capi.md` end-to-end explainer (Lead + CompleteRegistration).
