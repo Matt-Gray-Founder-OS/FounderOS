@@ -1,17 +1,16 @@
 # meta-capi
 
-Meta Conversions API integration for founderos.com. Fires server-side conversion
-events (alongside the browser Pixel) so Meta still attributes conversions when the
-Pixel is blocked by an ad blocker or privacy setting:
+Meta Conversions API integration for founderos.com. Reports conversions to Meta server-side so
+attribution survives ad blockers and privacy settings. Two events, two **different** triggers:
 
-- **Lead** on `/apply` when an application scores qualified.
-- **CompleteRegistration** on `/workshop` when the registration form succeeds.
-
-Both share one `event_id` with the Pixel so Meta deduplicates.
+- **Lead** - server-side. Fires when a qualifying inbound **Brand Strategy Call** is booked in
+  **iClosed**; the iClosed webhook is processed by n8n (`WF1`), which POSTs to the `meta-capi-lead`
+  edge function. No browser code.
+- **CompleteRegistration** - browser. Fires on a successful `/workshop` registration via the Meta
+  Pixel plus a CAPI call that shares one `event_id` (Meta dedupes the pair).
 
 ## Files
 - `capi-complete-registration.js` - CompleteRegistration browser module.
-- `capi-lead.js` - Lead browser module.
 - `meta-capi.md` - the full explanation (start here).
 - `CLAUDE.md` - operator cheat-sheet.
 

@@ -14,8 +14,9 @@ and data location, deploy/operate, and gotchas. Read that first.
 
 ## Files here
 - `capi-complete-registration.js` - CompleteRegistration module (`window.fireMetaCompleteRegistration`), wired in the `/workshop` Webflow footer via `setupReCAPTCHAForm` onSuccess.
-- `capi-lead.js` - **DEAD leftover.** The old browser Lead module; the `/apply` Webflow form stack it belonged to was replaced by iClosed, so `window.fireMetaCAPILead` is never called. Lead fires from n8n now. Removal is the code-audit pass.
 - Server code + engine live in `fos-control` (`supabase/functions/meta-capi/`, `meta-capi-lead/`, `_shared/meta_capi.ts`), deployed to Sales.
+
+The old browser Lead module `capi-lead.js` and the pre-iClosed application/routing scripts were removed 2026-07-23 (iClosed replaced that funnel); Lead now fires only server-side from n8n.
 
 ## Fast facts
 - Pixel `717725617464118`. Audit table `public.meta_capi_events` on Sales (`ldspjkntkuuqlwrdefzh`, `event_name` = Lead / CompleteRegistration). Vault on FOS Control (`yhvssclmrddiowlccvjc`).

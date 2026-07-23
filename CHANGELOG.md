@@ -1,5 +1,21 @@
 # CHANGELOG - FounderOS Website Scripts
 
+## 2026-07-23 - Docs match reality after the iClosed cleanup
+
+**WHAT:** Rewrote `CLAUDE.md` (a stale ~180-line phase log -> lean current-state guide) and corrected
+the meta-capi docs to the post-cleanup reality. `meta-capi.md` Section 5 (was "dead leftovers pending
+removal" / "not loaded on the live site") now records the pre-iClosed application stack + `capi-lead.js`
+as removed 2026-07-23, and its 406 gotcha no longer blames the `<meta refresh>` tag (a script-only
+footer also 406'd). `meta-capi/CLAUDE.md` and `meta-capi/README.md` drop the deleted `capi-lead.js` and
+fix the Lead description (server-side iClosed -> n8n, not a browser `/apply` event).
+
+**WHY:** iClosed is the application + booking system; there are no Webflow application forms. The old
+docs still described the pre-iClosed browser funnel and named files deleted earlier this session.
+
+**WATCH FOR:** `redirectByCountryConfig` (the geo-IP filter on the `/thank-you/*` template) is LIVE and
+stays. `apply-v2` was deleted from Webflow. The server-side docs (`fos-control/CLAUDE.md`) already
+matched reality and were left unchanged.
+
 ## 2026-07-23 - Remove inert application/ARIA routing scripts (post-iClosed cleanup)
 
 **WHAT:** Deleted 6 now-unreferenced browser scripts left over from before iClosed replaced the

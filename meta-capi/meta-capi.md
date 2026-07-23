@@ -106,19 +106,18 @@ Webflow Designer). Sends `_fbp`/`_fbc` cookies + hashed PII for match quality.
 
 ---
 
-## 5. Dead / leftover code (do not be misled)
+## 5. The removed pre-iClosed application stack
 
-The `/apply` **Webflow application-form stack was replaced by iClosed.** These are
-**dead leftovers** still sitting in the repo; their removal is the separate
-code-audit pass:
-
-- `meta-capi/capi-lead.js` - the browser Lead module (`window.fireMetaCAPILead`).
-  Still loaded on `/apply` but **never called** (its only caller,
-  `applicationFormControlNew.js`, is not loaded on the live page). The Lead fires
-  from n8n now, not from here.
-- `applicationFormControlNew.js`, `application-routing-v2.js`,
-  `application-routing-9Jun2026.js`, `application-routing-aria.js` - the old
-  Webflow application form + routing/scoring scripts. Not loaded on the live site.
+Before iClosed, `/apply` had a native Webflow application form with a browser Lead
+Pixel/CAPI module and client-side routing/scoring. iClosed replaced the application
+and booking, so that whole stack went inert and was **removed 2026-07-23**:
+`meta-capi/capi-lead.js` (the old `window.fireMetaCAPILead` browser module),
+`applicationFormControlNew.js`, `application-routing-v2.js`,
+`application-form-name-handler.js`, `application-routing-aria.js`, and
+`application-routing-9Jun2026.js`. Their Webflow references were cleared from
+`/apply` and the `/thank-you/*` template first (the live `redirectByCountryConfig`
+geo-IP redirect was kept). **Lead now fires only server-side** via iClosed -> n8n
+(Section 3); there is no browser Lead path.
 
 ---
 
@@ -250,8 +249,9 @@ group by 1 order by 2 desc;
 - **`CAPI_UNMAPPED_REVENUE` is now a real signal:** with non-application call types
   excluded, an entry means an inbound BSC arrived with a revenue answer the gate
   did not recognize. Investigate (a band was reworded, or the answer was blank).
-- **The `/workshop` footer must be edited in the Webflow Designer, not the API**
-  (the write API returns 406 on the `<meta http-equiv="refresh">` failsafe).
+- **Webflow custom-code footers are edited in the Designer, not the API.** The write API returns
+  406 on these freeform custom-code writes (observed on both the `/workshop` footer, which has a
+  `<meta http-equiv="refresh">`, and a script-only footer with none - so it is broader than any one tag).
 - **CompleteRegistration: one `event_id` per submit**, shared by Pixel + CAPI, or
   Meta double-counts. (Lead uses a deterministic `event_id` from n8n instead.)
 - **The audit row is ground truth, not Meta's UI.** Live events lag ~20 min in
