@@ -1,5 +1,22 @@
 # CHANGELOG - FounderOS Website Scripts
 
+## 2026-07-23 - Remove dead backup/deprecated files
+
+**WHAT:** Deleted 35 dead/stale tracked files: the `deprecated/` (19) and `backup codes/` (13)
+directories, `userDetails-backup.js`, and two obsolete routing-simplification design docs
+(`HANDOFF-routing-simplification.md`, `PROJECT_BRIEF_ROUTING_SIMPLIFICATION.md`).
+
+**WHY:** `deprecated/` and `backup codes/` were already `.gitignore`d but still tracked (committed
+before the ignore rule) and still deploying to Pages; the rest are superseded backups/old versions.
+Verified before deleting: no kept repo file references any removed path, and a crawl of all 342 live
+sitemap pages found 0 references to any `deprecated/` or `backup` path.
+
+**WATCH FOR:** Only dead/backup code was removed here, all recoverable from git history. The live
+`application-*` scripts are untouched: the `/thank-you/*` template still runs a live
+`#fos-application-main` form via `applicationFormControlNew.js` + `application-routing-v2.js` +
+`application-form-name-handler.js` plus a live `redirectByCountryConfig` geo-redirect. CLAUDE.md and
+meta-capi doc-accuracy corrections are a separate pass, not done here.
+
 ## 2026-07-23 - Harden setupReCAPTCHAForm (idempotent binding) + dedupe /workshop footer
 
 **WHAT:** `setupReCAPTCHAForm.js` now binds once per form: `attachHandler` returns early if
