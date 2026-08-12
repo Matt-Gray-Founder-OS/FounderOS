@@ -1,5 +1,29 @@
 # CHANGELOG - FounderOS Website Scripts
 
+## 2026-07-30 - Guard "Get The Framework" partial sends behind a valid email
+
+**WHAT:** Both Get The Framework modal scripts (`gfm-global-newsite.js`,
+`gfm-newsletter-page-newsite.js`) now gate the `newsletter-partial` n8n webhook POST
+behind a valid-email check (an `E()` guard on the accumulated `Email` field) at BOTH
+send points: step advance and the `beforeunload` handler. Previously the `beforeunload`
+send fired on every page exit, whether or not the visitor ever opened the modal or
+entered an email. Shipped by Matt via PR #1 (merge `d00db6a`, fix `4a69b6d`,
+2026-07-30); this entry backfills the CHANGELOG trail the merge omitted (caught by the
+doc-audit gate on pull).
+
+**WHY:** Measured on the live site: 100 n8n executions in 80 minutes, 91 carrying no
+email and only 9 reaching HubSpot - roughly 1,700 wasted executions/day against a
+metered n8n plan. Intentional partial-lead capture is preserved: a visitor who enters a
+valid email and then abandons is still captured, because the accumulator holds the email
+by the time `beforeunload` runs.
+
+**WATCH FOR:** The guard keys on the accumulated form field named `Email`
+(`d.Email` / `n.Email`). If the modal's email input `name`/`id` is ever renamed away
+from `Email`, the guard evaluates empty and silently suppresses ALL partial sends,
+including valid ones. Verified at merge: byte-identical revert of the inserted guards,
+`node --check` passes, DOM harness shows 0 POSTs with no/invalid email and 1 POST with a
+valid email, on both files.
+
 ## 2026-07-23 - Docs match reality after the iClosed cleanup
 
 **WHAT:** Rewrote `CLAUDE.md` (a stale ~180-line phase log -> lean current-state guide) and corrected
