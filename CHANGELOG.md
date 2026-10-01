@@ -22,9 +22,9 @@ are hygiene.
   live.
 - Renaming a Lead Magnets item drops its signups until the list, the HubSpot property options, and its
   workflow carry the new name.
-- The Lead Magnets `HubSpot Form ID` field (`hubspot-app---api-url`) is unused and slated for removal.
-  It is bound to the form's `data-webflow-hubspot-api-form-url` attribute on the template, so removal is
-  a Designer disconnect, then the delete, then a coordinated site publish.
+- The Lead Magnets `HubSpot Form ID` field (`hubspot-app---api-url`) is deprecated and not connected
+  to anything. It stays in the collection; leave it empty on new items.
+- `CLAUDE.md` Ownership: Webflow page structure is Don's.
 
 ## 2026-07-30 - Guard "Get The Framework" partial sends behind a valid email
 
