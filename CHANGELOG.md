@@ -1,5 +1,31 @@
 # CHANGELOG - FounderOS Website Scripts
 
+## 2026-10-01 - CLAUDE.md: form submissions reach HubSpot through n8n
+
+**WHAT:** `CLAUDE.md` Architecture now describes the live path. Webflow forms submit natively, n8n
+`Founder OS Form Submission` delivers each to its HubSpot form, and lead magnets route through
+`Founder OS Form Submission Lead Magnet` by CMS item name. The replaced line said forms post to
+HubSpot. Same day, outside this repo:
+- The lead magnet workflow's Code node now trims `pageName` before the lookup and carries the
+  `7 AI Employees` entry.
+- The Lead Magnets items ` Scale Yourself Blueprint`, ` Systems Starter Pack`, and
+  `The Leadership Blueprint ` lost their stray spaces and were republished item by item.
+
+**WHY:** The first signup on the new 7 AI Employees lead magnet (02:38 UTC) was dropped with
+`LEAD MAGNET DROPPED`: its name was not in the n8n list. The launch had filled the CMS
+`HubSpot Form ID` field, which nothing reads, on the old line's model of routing. Webflow already trims
+the hidden field on submit, so the three spaced names were delivering. The trim and the name cleanup
+are hygiene.
+
+**WATCH FOR:**
+- A new lead magnet needs its `"<name>": "<HubSpot form ID>"` line in the n8n list before the page goes
+  live.
+- Renaming a Lead Magnets item drops its signups until the list, the HubSpot property options, and its
+  workflow carry the new name.
+- The Lead Magnets `HubSpot Form ID` field (`hubspot-app---api-url`) is unused and slated for removal.
+  It is bound to the form's `data-webflow-hubspot-api-form-url` attribute on the template, so removal is
+  a Designer disconnect, then the delete, then a coordinated site publish.
+
 ## 2026-07-30 - Guard "Get The Framework" partial sends behind a valid email
 
 **WHAT:** Both Get The Framework modal scripts (`gfm-global-newsite.js`,

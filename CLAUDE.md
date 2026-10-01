@@ -15,8 +15,14 @@ custom-code writes (HTTP 406), so those edits are Designer-only.
 - **Webflow site id:** `673ff72afe499201ca5b3d58` (founderos.com / www.founderos.com).
 - Site-wide scripts load on every page from Webflow's site head/footer custom code; page-specific
   scripts load from an individual page's footer.
-- Forms post to HubSpot; partial submissions go to n8n. reCAPTCHA gating plus post-submit redirect and
-  success hooks are centralized in `setupReCAPTCHAForm.js` (binds once per form, idempotent).
+- Forms submit to Webflow natively, and n8n delivers every submission to HubSpot: `Founder OS Form
+  Submission` (Webflow Trigger, then a Switch on the form) posts each one to its HubSpot form.
+- Lead magnet forms go through `Founder OS Form Submission Lead Magnet`, which routes on the CMS item
+  name (the hidden `pageName` field) through a name-to-HubSpot-form list in its Code node. A name missing
+  from that list is not delivered and alerts `#tech_support` (`LEAD MAGNET DROPPED`). A new lead magnet
+  needs its line in that list, and renaming a Lead Magnets item breaks its routing until the list matches.
+- Partial submissions go to n8n webhooks. reCAPTCHA gating plus post-submit redirect and success hooks
+  are centralized in `setupReCAPTCHAForm.js` (binds once per form, idempotent).
 
 ## Live site-wide scripts (verified in Webflow site custom code)
 `setupReCAPTCHAForm.js`, `phone-script-maxmind.js`, `contentBasedOnLocation02192026.js` (geo content
