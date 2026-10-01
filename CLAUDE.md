@@ -49,9 +49,8 @@ fires browser-side on `/workshop`. Full end-to-end docs: [meta-capi/meta-capi.md
 Server code and engine live in the `fos-control` repo, deployed to the Sales Supabase project.
 
 ## Ownership
-- **Matthew** - Webflow page structure (coordinate on structural changes).
 - **Nhery** - HubSpot form configuration and marketing ops.
-- **Don** - routing logic, n8n pipeline, Meta CAPI.
+- **Don** - Webflow page structure, routing logic, n8n pipeline, Meta CAPI.
 
 ## History
 Prior architecture and phase history (the retired 4-route Calendly / Intro-Call funnel, the Apr 2026
